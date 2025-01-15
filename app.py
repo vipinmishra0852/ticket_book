@@ -3,21 +3,26 @@ from flask_mail import Mail, Message
 from pymongo import MongoClient
 import random
 import re
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-# Configuration for Flask-Mail
+# Configuration for Flask-Mail using environment variables
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'vipinmishra0852@gmail.com'  # Use your Gmail address
-app.config['MAIL_PASSWORD'] = 'bydz hyur sise mtyo'  # Use your App Password
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')  # Use environment variable for username
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')  # Use environment variable for password
 
 mail = Mail(app)
 otp_storage = {}
 
-# MongoDB Atlas Connection
-connection_string = 'mongodb+srv://vipinmishra0852:cqJCeLykkpGAQbz1@userdata.c4bg8.mongodb.net/?retryWrites=true&w=majority&appName=userData'  # Replace with your MongoDB connection string
+# MongoDB Atlas Connection using environment variable for Mongo URI
+connection_string = os.getenv('MONGO_URI')  # Mongo URI from environment variable
 try:
     client = MongoClient(connection_string, tls=True, tlsAllowInvalidCertificates=True)
     db = client['MuseumBookings']  # Use new database
